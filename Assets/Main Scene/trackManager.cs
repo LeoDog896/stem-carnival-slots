@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
-public class trackManager : MonoBehaviour
-{   
-    // Start is called before the first frame update
 
+public class trackManager : MonoBehaviour
+{
+    // Start is called before the first frame update
+    public TMPro.TMP_TextEventHandler myText;
     private static bool spinning = false;
     public int spinCount = 100;
     private float spins = 0;
@@ -25,6 +27,12 @@ public class trackManager : MonoBehaviour
    
     private void FixedUpdate()
     {
+
+        if (!moneyManager.chargeAccount())
+        {
+            return;
+        }
+
         if (Input.GetAxis("Submit") > 0 && !spinning)
         {
             //start the spin
