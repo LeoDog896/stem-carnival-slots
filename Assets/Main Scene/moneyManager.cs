@@ -6,7 +6,7 @@ public class moneyManager : MonoBehaviour
 {
 
     public static int slotCost = 1;
-    static int balance = 2;
+    static int balance = 50;
 
     public static bool chargeAccount()
     {

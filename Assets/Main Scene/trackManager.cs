@@ -102,15 +102,17 @@ public class trackManager : MonoBehaviour
                 {
                     int index = possibleWins[j, y] + (y * (spinCount + 50)) + spinCount - 1;
                     string thisSymbol = initializedItems[index].name;
+                    Debug.Log(thisSymbol);
                     if (lastSymbol == "none")
                     {
                         lastSymbol = thisSymbol;
                     }
-                    if(lastSymbol != thisSymbol)
+                    if (lastSymbol != thisSymbol)
                     {
                         winning = false;
                     }
                 }
+                Debug.Log("---+---");
                 if (winning)
                 {
                     winRows++;
