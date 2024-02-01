@@ -14,10 +14,10 @@ public class moneyManager : MonoBehaviour
         {
             balance -= slotCost;
 
-            return false;
+            return true;
         }
 
-        return true;
+        return false;
     }
 
     public static int getBalance()
@@ -27,7 +27,7 @@ public class moneyManager : MonoBehaviour
 
     public static void givePrize(int rows)
     {
-        balance += slotCost * (rows + 1);
+        balance += slotCost * (rows * 5);
     }
 
 }
