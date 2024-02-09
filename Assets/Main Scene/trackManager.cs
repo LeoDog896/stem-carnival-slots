@@ -10,11 +10,13 @@ public class trackManager : MonoBehaviour
 
     public TMP_Text textMesh;
     private static bool spinning = false;
+    private bool won = false;
     public int spinCount = 100;
     private float spins = 0;
     private float spinAmt = 0.5f;
     public int rows = 1;
     private int size = 2;
+    private int arrowWinIndicatorOn = 0;
     public GameObject[] spinnerItems = new GameObject[1];
 
     public GameObject[] arrows;
@@ -24,6 +26,7 @@ public class trackManager : MonoBehaviour
 
     void Start()
     {
+        won = false;
 
         rowManager = new GameObject[rows, spinCount + 50];
 
@@ -51,6 +54,9 @@ public class trackManager : MonoBehaviour
 
         if (Input.GetAxis("Submit") > 0 && !spinning)
         {
+
+            won = false;
+
             if (!moneyManager.chargeAccount())
             {
                 textMesh.text = "Credits: " + moneyManager.getBalance();
@@ -103,7 +109,6 @@ public class trackManager : MonoBehaviour
                 for (int y = 0; y < 3; y++)
                 {
                     string thisSymbol = rowManager[y, 50 + spinCount - 3 + possibleWins[j, y]].name;
-                    Debug.Log(thisSymbol);
                     if (lastSymbol == "none")
                     {
                         lastSymbol = thisSymbol;
@@ -113,7 +118,6 @@ public class trackManager : MonoBehaviour
                         winning = false;
                     }
                 }
-                Debug.Log("---+---");
                 if (winning)
                 {
                     winRows++;
@@ -123,6 +127,7 @@ public class trackManager : MonoBehaviour
             if(winRows > 0)
             {
                 Debug.Log("won in " + winRows + " rows!");
+                won = true;
                 moneyManager.givePrize(winRows);
                 
             }
@@ -132,6 +137,8 @@ public class trackManager : MonoBehaviour
             spins = 0;
             
         }
+
+
 
         if (spinning)
         {
@@ -170,6 +177,45 @@ public class trackManager : MonoBehaviour
 
 
 
+        } else if (won)
+        {
+            for (int i = 0; i < arrows.Length; i++)
+            {
+                if (arrowWinIndicatorOn > 5)
+                {
+                    Renderer mesh = arrows[i].GetComponent<Renderer>();
+                    Color tempcolor = mesh.material.color;
+                    tempcolor.a = 1f;
+                    mesh.material.color = tempcolor;
+                }
+                else
+                {
+                    Renderer mesh = arrows[i].GetComponent<Renderer>();
+                    Color tempcolor = mesh.material.color;
+                    tempcolor.a = 0.25f;
+                    mesh.material.color = tempcolor;
+                }
+             
+            }
+
+            
+            arrowWinIndicatorOn++;
+            if (arrowWinIndicatorOn > 10)
+            {
+                arrowWinIndicatorOn = 0;
+            }
+
+
+        }
+        else
+        {
+            for (int i = 0; i < arrows.Length; i++) {
+                Renderer mesh = arrows[i].GetComponent<Renderer>();
+                Color tempcolor = mesh.material.color;
+                tempcolor.a = 0.25f;
+                mesh.material.color = tempcolor;
+               
+            }
         }
 
 
