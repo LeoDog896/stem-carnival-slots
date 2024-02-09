@@ -12,6 +12,9 @@ public class trackManager : MonoBehaviour
     private static bool spinning = false;
     private bool won = false;
     public int spinCount = 100;
+    public int spinFrames = 250;
+    private double currentFrame = 0;
+    public double frameStep = 1;
     private float spins = 0;
     private float spinAmt = 0.5f;
     public int rows = 1;
@@ -29,7 +32,7 @@ public class trackManager : MonoBehaviour
         won = false;
 
         rowManager = new GameObject[rows, spinCount + 50];
-
+        gameObject.transform.position = new Vector2(gameObject.transform.position.x, 0);
         //initalisze somestarting stuff
         for (int j = 0; j < rows; j++)
         {
@@ -54,7 +57,7 @@ public class trackManager : MonoBehaviour
 
         if (Input.GetAxis("Submit") > 0 && !spinning)
         {
-
+            currentFrame = 0;
             won = false;
 
             if (!moneyManager.chargeAccount())
@@ -64,7 +67,7 @@ public class trackManager : MonoBehaviour
 
             }
             textMesh.text = "Credits: " + moneyManager.getBalance();
-            //start the spin
+            //destory previous spin.
             for (int i = 0; i < rowManager.GetLength(0); i++)
             {
                 for(int j = 0; j < rowManager.GetLength(1); j++)
@@ -74,6 +77,8 @@ public class trackManager : MonoBehaviour
             }
 
             rowManager = new GameObject[rows, spinCount + 50];
+
+            gameObject.transform.position = new Vector2(gameObject.transform.position.x, 0);
 
             //initalisze somestarting stuff
             for (int j = 0; j < rows; j++)
@@ -142,9 +147,28 @@ public class trackManager : MonoBehaviour
 
         if (spinning)
         {
+            //the spin distance calculations
 
-            gameObject.transform.position = new Vector2(gameObject.transform.position.x, gameObject.transform.position.y - spinAmt);
-            spins += spinAmt/(size);
+            if(!(currentFrame > spinFrames))
+            {
+                double maxValue = 21.5f * System.Math.Log(spinFrames + 1, System.Math.E);
+
+                //calculate the current value based on the frame
+                double currentValue = 21.5f * System.Math.Log(currentFrame + 1, System.Math.E);
+
+                //calculate as a percentage of the max
+                double percentOfMax = currentValue / maxValue;
+
+                float location = 0 - (float)(percentOfMax * size * (spinCount -2));
+
+                gameObject.transform.position = new Vector2(gameObject.transform.position.x, location);
+                currentFrame++;
+            } else
+            {
+                spinning = false;
+            }
+            // calculate the maxmimum the result at the maximum frame
+           
 
             if(arrowHelper > 29)
             {
