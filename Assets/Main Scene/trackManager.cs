@@ -8,27 +8,75 @@ public class trackManager : MonoBehaviour
 {
     // Start is called before the first frame update
 
+
+    //public stuff I dont care about
     public TMP_Text textMesh;
-    private static bool spinning = false;
-    private bool won = false;
+    public GameObject[] arrows;
+    
+    public int rows = 1;
+    
+
+    //spin animation settings
     public int spinCount = 100;
     public int spinFrames = 250;
-    private double currentFrame = 0;
     public double frameStep = 1;
+    private static bool spinning = false;
+    private bool won = false;
+    private double currentFrame = 0;
     private float spins = 0;
     private float spinAmt = 0.5f;
-    public int rows = 1;
     private int size = 2;
-    private int arrowWinIndicatorOn = 0;
-    public GameObject[] spinnerItems = new GameObject[1];
 
-    public GameObject[] arrows;
+
+
+    private System.Random rand = new System.Random();
+
+
+    private int arrowWinIndicatorOn = 0;
+    private GameObject[,] rowManager;
     private int arrowHelper = 0;
 
-    private GameObject[,] rowManager;
+    //random object related stuff
+    public GameObject[] spinnerItems = new GameObject[1];
+    public double[] chances = new double[1];
+    private double[] ranges;
+    private double totalChance;
+
+    //valeus stuff
+    public int[] values;
+
+    private GameObject randomObject()
+    {
+        //get the sum
+        double randomNumber = rand.NextDouble();
+        for (int c = 0; c < ranges.Length; c++)
+        {
+            if (randomNumber < ranges[c])
+            {
+                return spinnerItems[c];
+            }
+        }
+        return spinnerItems[0];
+
+    }
 
     void Start()
-    {
+    {   
+
+        foreach(double chance in chances)
+        {
+            totalChance += chance;
+        }
+        ranges = new double[chances.Length];
+        //go again, and this time, get the percent of the total and fill the percents array
+        double rangesTotal = 0;
+        for(int i = 0; i < chances.Length; i++)
+        {
+            ranges[i] = chances[i] / totalChance + rangesTotal;
+            rangesTotal += chances[i] / totalChance;
+        }
+
+        //get the sum of all the row chances
         won = false;
 
         rowManager = new GameObject[rows, spinCount + 50];
@@ -40,7 +88,7 @@ public class trackManager : MonoBehaviour
             {
 
                 //pick a random game object
-                GameObject spinnerObject = spinnerItems[Random.Range(0, spinnerItems.Length)];
+                GameObject spinnerObject = randomObject();
                 GameObject cloned = Instantiate(spinnerObject, this.transform, worldPositionStays: false);
                 cloned.transform.localScale = new Vector3(size, size, size);
                 cloned.transform.position = new Vector2((j * (size * 1.5f) - (2 * (rows - 1))) + gameObject.transform.position.x, i * size - spinCount * size);
@@ -87,7 +135,7 @@ public class trackManager : MonoBehaviour
                 {
 
                     //pick a random game object
-                    GameObject spinnerObject = spinnerItems[Random.Range(0, spinnerItems.Length)];
+                    GameObject spinnerObject = randomObject();
                     GameObject cloned = Instantiate(spinnerObject, this.transform, worldPositionStays: false);
                     cloned.transform.localScale = new Vector3(size, size, size);
                     cloned.transform.position = new Vector2((j * (size * 1.5f) - (2 * (rows - 1))) + gameObject.transform.position.x, i * size - spinCount * size);
@@ -166,6 +214,7 @@ public class trackManager : MonoBehaviour
             } else
             {
                 spinning = false;
+                textMesh.text = "Credits: " + moneyManager.getBalance();
             }
             // calculate the maxmimum the result at the maximum frame
            
