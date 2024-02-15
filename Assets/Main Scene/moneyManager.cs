@@ -25,9 +25,9 @@ public class moneyManager : MonoBehaviour
         return balance;
     }
 
-    public static void givePrize(int rows)
+    public static void givePrize(int multi)
     {
-        balance += slotCost * (rows * 5);
+        balance += slotCost * multi;
     }
 
 }

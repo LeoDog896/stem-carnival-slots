@@ -196,18 +196,19 @@ MonoBehaviour:
   frameStep: 1
   spinnerItems:
   - {fileID: 803165753}
+  - {fileID: 1530196664}
   - {fileID: 1009094806}
   - {fileID: 1960287794}
-  - {fileID: 1530196664}
   - {fileID: 243813987}
   - {fileID: 1622069149}
   chances:
   - 7.5
-  - 17.5
-  - 17.5
   - 7.5
+  - 17.5
+  - 17.5
   - 25
   - 25
+  values: 050000000500000003000000030000000200000002000000
 --- !u!4 &218967391
 Transform:
   m_ObjectHideFlags: 0

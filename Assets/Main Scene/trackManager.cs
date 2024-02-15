@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine;
 
 
+
 public class trackManager : MonoBehaviour
 {
     // Start is called before the first frame update
@@ -29,15 +30,15 @@ public class trackManager : MonoBehaviour
 
 
 
-    private System.Random rand = new System.Random();
+   
 
 
     private int arrowWinIndicatorOn = 0;
-    private GameObject[,] rowManager;
+    private SlotDisplayHelper[,] rowManager;
     private int arrowHelper = 0;
 
     //random object related stuff
-    public GameObject[] spinnerItems = new GameObject[1];
+    public GameObject[] spinnerItems;
     public double[] chances = new double[1];
     private double[] ranges;
     private double totalChance;
@@ -45,41 +46,15 @@ public class trackManager : MonoBehaviour
     //valeus stuff
     public int[] values;
 
-    private GameObject randomObject()
-    {
-        //get the sum
-        double randomNumber = rand.NextDouble();
-        for (int c = 0; c < ranges.Length; c++)
-        {
-            if (randomNumber < ranges[c])
-            {
-                return spinnerItems[c];
-            }
-        }
-        return spinnerItems[0];
-
-    }
+    
 
     void Start()
-    {   
+    {
+        SlotObjectHelper.setup(spinnerItems, chances, values);
 
-        foreach(double chance in chances)
-        {
-            totalChance += chance;
-        }
-        ranges = new double[chances.Length];
-        //go again, and this time, get the percent of the total and fill the percents array
-        double rangesTotal = 0;
-        for(int i = 0; i < chances.Length; i++)
-        {
-            ranges[i] = chances[i] / totalChance + rangesTotal;
-            rangesTotal += chances[i] / totalChance;
-        }
-
-        //get the sum of all the row chances
         won = false;
 
-        rowManager = new GameObject[rows, spinCount + 50];
+        rowManager = new SlotDisplayHelper[rows, spinCount + 50];
         gameObject.transform.position = new Vector2(gameObject.transform.position.x, 0);
         //initalisze somestarting stuff
         for (int j = 0; j < rows; j++)
@@ -88,11 +63,11 @@ public class trackManager : MonoBehaviour
             {
 
                 //pick a random game object
-                GameObject spinnerObject = randomObject();
-                GameObject cloned = Instantiate(spinnerObject, this.transform, worldPositionStays: false);
-                cloned.transform.localScale = new Vector3(size, size, size);
-                cloned.transform.position = new Vector2((j * (size * 1.5f) - (2 * (rows - 1))) + gameObject.transform.position.x, i * size - spinCount * size);
-                rowManager[j, i] = cloned;
+                SlotDisplayHelper temp = SlotObjectHelper.randomObject();
+                temp.cloned = Instantiate(temp.gameObject, this.transform, worldPositionStays: false);
+                temp.cloned.transform.localScale = new Vector3(size, size, size);
+                temp.cloned.transform.position = new Vector2((j * (size * 1.5f) - (2 * (rows - 1))) + gameObject.transform.position.x, i * size - spinCount * size);
+                rowManager[j, i] = temp;
             }
         }
     }
@@ -120,11 +95,11 @@ public class trackManager : MonoBehaviour
             {
                 for(int j = 0; j < rowManager.GetLength(1); j++)
                 {
-                    Destroy(rowManager[i, j]);
+                    Destroy(rowManager[i, j].cloned);
                 }
             }
 
-            rowManager = new GameObject[rows, spinCount + 50];
+            rowManager = new SlotDisplayHelper[rows, spinCount + 50];
 
             gameObject.transform.position = new Vector2(gameObject.transform.position.x, 0);
 
@@ -135,11 +110,11 @@ public class trackManager : MonoBehaviour
                 {
 
                     //pick a random game object
-                    GameObject spinnerObject = randomObject();
-                    GameObject cloned = Instantiate(spinnerObject, this.transform, worldPositionStays: false);
-                    cloned.transform.localScale = new Vector3(size, size, size);
-                    cloned.transform.position = new Vector2((j * (size * 1.5f) - (2 * (rows - 1))) + gameObject.transform.position.x, i * size - spinCount * size);
-                    rowManager[j, i] = cloned;
+                    SlotDisplayHelper temp = SlotObjectHelper.randomObject();
+                    temp.cloned = Instantiate(temp.gameObject, this.transform, worldPositionStays: false);
+                    temp.cloned.transform.localScale = new Vector3(size, size, size);
+                    temp.cloned.transform.position = new Vector2((j * (size * 1.5f) - (2 * (rows - 1))) + gameObject.transform.position.x, i * size - spinCount * size);
+                    rowManager[j, i] = temp;
                 }
             }
 
@@ -154,14 +129,17 @@ public class trackManager : MonoBehaviour
                 {2,1,0 }
             };
 
+            int totalWinVlaue = 0;
 
             for (int j = 0; j < possibleWins.GetLength(0); j++)
             {
                 bool winning = true;
                 string lastSymbol = "none";
+                int tempValue = 0;
                 for (int y = 0; y < 3; y++)
                 {
-                    string thisSymbol = rowManager[y, 50 + spinCount - 3 + possibleWins[j, y]].name;
+                    string thisSymbol = rowManager[y, 50 + spinCount - 3 + possibleWins[j, y]].cloned.name;
+                    tempValue = rowManager[y, 50 + spinCount - 3 + possibleWins[j, y]].value;
                     if (lastSymbol == "none")
                     {
                         lastSymbol = thisSymbol;
@@ -174,14 +152,14 @@ public class trackManager : MonoBehaviour
                 if (winning)
                 {
                     winRows++;
+                    totalWinVlaue += tempValue;
                 }
             }
           
             if(winRows > 0)
             {
-                Debug.Log("won in " + winRows + " rows!");
                 won = true;
-                moneyManager.givePrize(winRows);
+                moneyManager.givePrize(totalWinVlaue);
                 
             }
 
