@@ -7,8 +7,9 @@ using UnityEngine;
 
 public class trackManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-
+    // Sound stuff
+    public GameObject audioManager;
+    public AudioClip spinSound;
 
     //public stuff I dont care about
     public TMP_Text textMesh;
@@ -29,7 +30,7 @@ public class trackManager : MonoBehaviour
     private int size = 2;
 
 
-
+    int lastPercent = 0;
    
 
 
@@ -185,10 +186,20 @@ public class trackManager : MonoBehaviour
                 //calculate as a percentage of the max
                 double percentOfMax = currentValue / maxValue;
 
+                if (System.Math.Floor(percentOfMax * 75) != lastPercent)
+                {
+                    lastPercent = (int) System.Math.Floor(percentOfMax * 75);
+                    //sounds
+                    AudioSource sound = audioManager.AddComponent<AudioSource>(); ;
+                    sound.clip = spinSound;
+                    sound.Play();
+                }
+
                 float location = 0 - (float)(percentOfMax * size * (spinCount -2));
 
                 gameObject.transform.position = new Vector2(gameObject.transform.position.x, location);
                 currentFrame++;
+                
             } else
             {
                 spinning = false;
