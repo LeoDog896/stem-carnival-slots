@@ -53,7 +53,10 @@ public class trackManager : MonoBehaviour
     {
         SlotObjectHelper.setup(spinnerItems, chances, values);
 
+
+        textMesh.text = moneyManager.getBalance().ToString();
         won = false;
+        moneyFall.doFall = false;
 
         rowManager = new SlotDisplayHelper[rows, spinCount + 50];
         gameObject.transform.position = new Vector2(gameObject.transform.position.x, 0);
@@ -81,16 +84,17 @@ public class trackManager : MonoBehaviour
 
         if (Input.GetAxis("Submit") > 0 && !spinning)
         {
+            moneyFall.doFall = false;
             currentFrame = 0;
             won = false;
 
             if (!moneyManager.chargeAccount())
             {
-                textMesh.text = "Credits: " + moneyManager.getBalance();
+                textMesh.text = moneyManager.getBalance().ToString();
                 return;
 
             }
-            textMesh.text = "Credits: " + moneyManager.getBalance();
+            textMesh.text = moneyManager.getBalance().ToString();
             //destory previous spin.
             for (int i = 0; i < rowManager.GetLength(0); i++)
             {
@@ -203,7 +207,7 @@ public class trackManager : MonoBehaviour
             } else
             {
                 spinning = false;
-                textMesh.text = "Credits: " + moneyManager.getBalance();
+                textMesh.text = moneyManager.getBalance().ToString();
             }
             // calculate the maxmimum the result at the maximum frame
            
@@ -259,6 +263,7 @@ public class trackManager : MonoBehaviour
                 }
              
             }
+            moneyFall.doFall = true;
 
             
             arrowWinIndicatorOn++;

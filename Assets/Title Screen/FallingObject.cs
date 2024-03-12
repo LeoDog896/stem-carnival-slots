@@ -2,9 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+
 public class FallingObject : MonoBehaviour
 {
     // Start is called before the first frame update
+    public static bool destory = false;
 
     void getReady(Rigidbody2D rigidBody)
     {
@@ -25,7 +28,14 @@ public class FallingObject : MonoBehaviour
         Rigidbody2D rigidBody = gameObject.GetComponent<Rigidbody2D>();
         if (rigidBody.position.y < -10)
         {
-            getReady(rigidBody);
+            if(destory)
+            {
+                Destroy(gameObject);
+            } else
+            {
+                getReady(rigidBody);
+            }
+            
         }
     }
 }

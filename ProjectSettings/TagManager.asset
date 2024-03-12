@@ -44,6 +44,15 @@ TagManager:
   - name: Items
     uniqueID: 2365445991
     locked: 0
+  - name: Spinner Items
+    uniqueID: 2933235523
+    locked: 0
+  - name: Background Assets
+    uniqueID: 2489016127
+    locked: 0
   - name: UI
     uniqueID: 4178701779
+    locked: 0
+  - name: Over Everything
+    uniqueID: 4256834751
     locked: 0
