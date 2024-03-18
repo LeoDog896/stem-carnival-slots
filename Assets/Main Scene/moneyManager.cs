@@ -20,6 +20,10 @@ public class moneyManager : MonoBehaviour
         return false;
     }
 
+    public static void SetBalance(int bal)
+    {
+        balance = bal;
+    }
     public static int getBalance()
     {
         return balance;

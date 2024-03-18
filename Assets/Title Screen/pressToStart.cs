@@ -9,29 +9,19 @@ public class pressToStart : MonoBehaviour
 
     public string titleSceneName;
     public string gameSceneName;
-    // Start is called before the first frame update
-    void Start()
-    {
-    }
 
-    // Update is called once per frame
-    void Update()
+    public void Start()
     {
-        
+        BioTrack.OnStart((List<JoinRequestUser> users) =>
+        {
+            moneyManager.SetBalance(users[0].score);
+            SceneManager.LoadScene(gameSceneName);
+        });
     }
 
     public void showTitle()
     {
         SceneManager.LoadScene(titleSceneName);
-    }
-
-    private void FixedUpdate()
-    {
-        if (Input.GetAxis("Submit") > 0 && showingTitle)
-        {
-
-            SceneManager.LoadScene(gameSceneName);
-
-        }
+        
     }
 }

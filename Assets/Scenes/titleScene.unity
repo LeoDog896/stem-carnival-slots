@@ -544,6 +544,7 @@ GameObject:
   - component: {fileID: 1067696342}
   - component: {fileID: 1067696341}
   - component: {fileID: 1067696344}
+  - component: {fileID: 1067696345}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -631,6 +632,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   titleSceneName: TitleScene
   gameSceneName: MainScene
+--- !u!114 &1067696345
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1067696340}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9468a76ef80bcc2498d039878bdb0505, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bioTrackGameId: 1
+  maxPlayerCount: 1
 --- !u!1 &1089325945
 GameObject:
   m_ObjectHideFlags: 0
