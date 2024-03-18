@@ -5,6 +5,7 @@ using UnityEngine.Networking;
 
 public class BioTrackAttachable : MonoBehaviour
 {
+    //you need one game object with this script per scene!
 
     private static string bioTrackUrl = "https://localhost:5000"; // no trailing slash
 
@@ -31,7 +32,7 @@ public class BioTrackAttachable : MonoBehaviour
 
     public void Finisher(int creditAmount, bool cont, object data)
     {
-
+        StartCoroutine(BioTrack.FinishRequest(creditAmount, cont, data));
     }
 
 

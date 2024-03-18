@@ -26,6 +26,7 @@ public static class BioTrack
 
     private static JoinRequestList joinRequests;
     private static List<Action<List<JoinRequestUser>>> joinFunctionList = new List<Action<List<JoinRequestUser>>>();
+    private static List<Action<bool>> endFunctionList = new List<Action<bool>>();
     public static BioTrackAttachable Attached { get; set; }
     public static void Init(string url, int gameId, int maxPlayers = 0)
     {
@@ -43,7 +44,11 @@ public static class BioTrack
     {
         joinFunctionList.Add(function);
     }
-    
+    public static void OnFinish(Action<bool> function)
+    {
+        endFunctionList.Add(function);
+    }
+
     public static void StartGame()
     {
         paused = true;
@@ -68,6 +73,10 @@ public static class BioTrack
 
     public static void FinishGame(int score, bool doContinue, object data)
     {
+        endFunctionList.ForEach((item) =>
+        {
+            item(doContinue);
+        });
         Attached.Finisher(score, doContinue, data);
     }
 
@@ -113,21 +122,20 @@ public static class BioTrack
         }
     }
 
-    public static IEnumerable FinishRequest(int score, bool doContinue, object data)
+    public static IEnumerator FinishRequest(int score, bool doContinue, object data)
     {
 
-        if(doContinue)
+        if(!doContinue)
         {
             paused = false;
         }
 
         string url = gameUrl + "/finish?score=" + score + "&finished=" + doContinue.ToString() + "&data=" + JsonConvert.SerializeObject(data);
+        Debug.Log(url);
         using (UnityWebRequest webRequest = UnityWebRequest.Post(url, "{}"))
         {
             webRequest.certificateHandler = new CertificateShenanigans();
             yield return webRequest.SendWebRequest();
-            string rawApiResponse = webRequest.downloadHandler.text;
-            Debug.Log(rawApiResponse);
         }
     }
 

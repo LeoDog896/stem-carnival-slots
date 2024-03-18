@@ -80,8 +80,7 @@ public class trackManager : MonoBehaviour
     private void FixedUpdate()
     {
 
-
-
+        
         if (Input.GetAxis("Submit") > 0 && !spinning)
         {
             moneyFall.doFall = false;
@@ -264,6 +263,7 @@ public class trackManager : MonoBehaviour
              
             }
             moneyFall.doFall = true;
+            
 
             
             arrowWinIndicatorOn++;

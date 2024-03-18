@@ -13,6 +13,7 @@ public class moneyManager : MonoBehaviour
         if(balance >= slotCost)
         {
             balance -= slotCost;
+            BioTrack.FinishGame(-1, true, new object());
 
             return true;
         }
@@ -31,6 +32,7 @@ public class moneyManager : MonoBehaviour
 
     public static void givePrize(int multi)
     {
+        BioTrack.FinishGame(slotCost * multi, true, new object());
         balance += slotCost * multi;
     }
 

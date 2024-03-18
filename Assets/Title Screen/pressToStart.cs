@@ -17,11 +17,14 @@ public class pressToStart : MonoBehaviour
             moneyManager.SetBalance(users[0].score);
             SceneManager.LoadScene(gameSceneName);
         });
-    }
 
-    public void showTitle()
-    {
-        SceneManager.LoadScene(titleSceneName);
-        
+        BioTrack.OnFinish((cont) =>
+        {   
+            if(!cont)
+            {
+                SceneManager.LoadScene(titleSceneName);
+            }
+            
+        });
     }
 }
