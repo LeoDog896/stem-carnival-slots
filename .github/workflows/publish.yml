@@ -24,10 +24,10 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/cache@v3
         with:
-          path: path/to/your/project/Library
-          key: Library-MyProjectName-TargetPlatform
+          path: ./Library
+          key: Library-stem-carnival-slots-WebGL
           restore-keys: |
-            Library-MyProjectName-
+            Library-stem-carnival-slots-
             Library-
       - uses: game-ci/unity-builder@v4
         env:
@@ -40,7 +40,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
             name: build
-            path: build
+            path: build/WebGL/WebGL
   pages:
     needs: checks
     if: github.event_name != 'pull_request'
