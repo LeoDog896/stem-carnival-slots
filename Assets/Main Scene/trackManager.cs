@@ -2,8 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-
-
+using UnityEngine.SceneManagement;
 
 public class trackManager : MonoBehaviour
 {
@@ -74,11 +73,21 @@ public class trackManager : MonoBehaviour
                 rowManager[j, i] = temp;
             }
         }
+
+        BioTrack.OnFinish((bool cont) =>
+        {
+            SceneManager.LoadScene("titleScene");
+        });
     }
 
-   
+
     private void FixedUpdate()
     {
+
+        if (Input.GetKey(KeyCode.F))
+        {
+            BioTrack.FinishGame(0, false, new object());
+        }
 
         
         if (Input.GetAxis("Submit") > 0 && !spinning)
