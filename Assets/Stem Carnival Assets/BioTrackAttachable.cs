@@ -15,24 +15,20 @@ public class BioTrackAttachable : MonoBehaviour
     void Start()
     {
         BioTrack.Init(bioTrackUrl, bioTrackGameId, maxPlayerCount);
-        InvokeRepeating("FetchJoinQueue", 0f, 0.25f);
         BioTrack.Attached = this;
     }
     // Update is called once per frame
 
     void FetchJoinQueue()
     {
-        StartCoroutine(BioTrack.FetchData());
     }
 
     public void acknowledger(string ids)
     {
-        StartCoroutine(BioTrack.AcknowledgeJoin(ids));
     }
 
     public void Finisher(int creditAmount, bool cont, object data)
     {
-        StartCoroutine(BioTrack.FinishRequest(creditAmount, cont, data));
     }
 
 

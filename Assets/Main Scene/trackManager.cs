@@ -74,10 +74,7 @@ public class trackManager : MonoBehaviour
             }
         }
 
-        BioTrack.OnFinish((bool cont) =>
-        {
-            SceneManager.LoadScene("titleScene");
-        });
+        
     }
 
 

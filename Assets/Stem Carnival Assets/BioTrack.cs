@@ -49,21 +49,12 @@ public static class BioTrack
 
     public static void StartGame()
     {
-        paused = true;
-        string ids = "?";
         List<JoinRequestUser> reqUserList = new();
-        joinRequests.joinRequests.ForEach((item) =>
-        {
-            ids += "id=" + item.id.ToString() + "&";
-            reqUserList.Add(item.user);
-        });
-
-        Attached.acknowledger(ids);
-
-        //call the start functions
+        var usr = new JoinRequestUser();
+        usr.score = 5;
+        reqUserList.Add(usr);
         joinFunctionList.ForEach((item) =>
         {
-            
             item(reqUserList);
         });
 
@@ -75,7 +66,6 @@ public static class BioTrack
         {
             item(doContinue);
         });
-        Attached.Finisher(score, doContinue, data);
     }
 
     
@@ -89,12 +79,15 @@ public static class BioTrack
         }
         using (UnityWebRequest webRequest = UnityWebRequest.Get(gameUrl + "/queue/all"))
         {
-            webRequest.certificateHandler = new CertificateShenanigans();
             yield return webRequest.SendWebRequest();
             string rawApiResponse = webRequest.downloadHandler.text;
             JoinRequestList data = JsonConvert.DeserializeObject<JoinRequestList>(rawApiResponse);
-            joinRequests = data;
-            if(data.joinRequests.Count >= maxPlayerCount)
+            
+            joinRequests = new JoinRequestList();
+            var req = new JoinRequest();
+            req.user.score = 10;
+            joinRequests.joinRequests.Add(req);
+            if (data.joinRequests.Count >= maxPlayerCount)
             {
                 StartGame();
             }

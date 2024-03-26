@@ -19,12 +19,19 @@ public class pressToStart : MonoBehaviour
         });
 
         BioTrack.OnFinish((cont) =>
-        {   
-            if(!cont)
+        {
+        if (cont == false)
             {
                 SceneManager.LoadScene(titleSceneName);
             }
             
         });
+    }
+
+    public void FixedUpdate()
+    {
+        if(Input.GetAxis("Submit") > 0.5) {
+            BioTrack.StartGame();
+        }
     }
 }
